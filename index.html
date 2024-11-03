@@ -35,11 +35,12 @@
 <div class="container">
     <h1>Pruebas de Funcionalidad - Amparo</h1>
 
-    <!-- Prueba de Comandos de Voz -->
+    <!-- Prueba de Comandos de Voz con Respuesta de IA -->
     <div class="section">
         <h2>Prueba de Comandos de Voz</h2>
         <button onclick="startVoiceTest()">Activar Comando de Voz</button>
         <p id="voiceOutput">Diga "Amparo" seguido de su comando.</p>
+        <p id="aiResponse">Respuesta de Amparo:</p>
     </div>
 
     <!-- Prueba de Subida de Archivos -->
@@ -47,37 +48,77 @@
         <h2>Prueba de Subida de Archivos</h2>
         <input type="file" id="fileInput">
         <button onclick="uploadFile()">Subir y Interpretar Archivo</button>
-        <p id="fileOutput">Texto interpretado aparecerá aquí.</p>
+        <p id="fileOutput">Texto interpretado aparecerá aquí (simulado).</p>
     </div>
 
     <!-- Prueba de Visualización de Datos -->
     <div class="section">
         <h2>Prueba de Visualización de Datos</h2>
-        <p>Aquí puedes mostrar datos ficticios o de ejemplo para probar la visualización.</p>
-        <!-- Añadir ejemplos de recetas, proveedores, etc. -->
+        <button onclick="loadSampleData()">Cargar Datos de Prueba</button>
+        <div id="dataOutput">Los datos de prueba aparecerán aquí.</div>
     </div>
 </div>
 
 <script>
-    // Función para probar el comando de voz
+    // Función para probar el comando de voz con respuesta de IA simulada
     function startVoiceTest() {
         const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
         recognition.lang = "es-ES";
         recognition.onresult = function(event) {
             const transcript = event.results[0][0].transcript;
             document.getElementById('voiceOutput').innerText = "Comando de voz detectado: " + transcript;
+            getAIResponse(transcript);
         };
         recognition.start();
     }
 
-    // Función para subir y procesar un archivo (simulada)
+    // Función simulada para obtener respuesta de IA
+    function getAIResponse(command) {
+        let response;
+        if (command.toLowerCase().includes("receta de pizza")) {
+            response = "Aquí tienes la receta de una pizza napolitana clásica: Tomate, mozzarella, albahaca fresca, aceite de oliva y una pizca de sal.";
+        } else if (command.toLowerCase().includes("proveedores")) {
+            response = "Actualmente tienes dos proveedores activos: Proveedor A y Proveedor B, con buenas opciones para tomate y queso.";
+        } else {
+            response = "Lo siento, no entiendo ese comando. Intenta preguntar por una receta o por proveedores.";
+        }
+        document.getElementById('aiResponse').innerText = "Respuesta de Amparo: " + response;
+    }
+
+    // Función para simular la subida y procesamiento de un archivo
     function uploadFile() {
         const fileInput = document.getElementById('fileInput');
         if (fileInput.files.length > 0) {
-            document.getElementById('fileOutput').innerText = "Archivo subido y procesado (simulado)";
+            document.getElementById('fileOutput').innerText = "Archivo subido y procesado (simulado): Texto interpretado como 'Ingredientes: harina, agua, levadura...'";
         } else {
             alert("Por favor, selecciona un archivo primero.");
         }
+    }
+
+    // Función para cargar datos de prueba de recetas y proveedores
+    function loadSampleData() {
+        const sampleData = {
+            recipes: [
+                { name: "Pizza Margherita", ingredients: "Tomate, Mozzarella, Albahaca, Aceite de oliva", price: "8.50€" },
+                { name: "Pizza Pepperoni", ingredients: "Tomate, Mozzarella, Pepperoni", price: "9.00€" }
+            ],
+            suppliers: [
+                { name: "Proveedor A", items: "Tomate, Queso Mozzarella" },
+                { name: "Proveedor B", items: "Harina, Aceite de Oliva" }
+            ]
+        };
+
+        let output = "<h3>Recetas</h3>";
+        sampleData.recipes.forEach(recipe => {
+            output += `<p><strong>${recipe.name}</strong>: ${recipe.ingredients} - ${recipe.price}</p>`;
+        });
+
+        output += "<h3>Proveedores</h3>";
+        sampleData.suppliers.forEach(supplier => {
+            output += `<p><strong>${supplier.name}</strong>: ${supplier.items}</p>`;
+        });
+
+        document.getElementById('dataOutput').innerHTML = output;
     }
 </script>
 
